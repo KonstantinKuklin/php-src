@@ -35,6 +35,10 @@ PHP                                                                        NEWS
   . Fixed bug #77024 (SplFileObject::__toString() may return array). (Craig
     Duncan)
 
+- ZIP:
+  . Fixed bug #77978 (Wrong relative path on unpacking zip archives with :/
+    character sequences). (Konstantin Kuklin)
+
 02 May 2019, PHP 7.2.18
 
 - CLI:
