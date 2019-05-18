@@ -37,7 +37,6 @@ $pathList = [
     "C:abc/filename22.txt",
     "C:\abc/filename23.txt",
     "C:/abc/filename24.txt",
-    "dir/test/filename25.txt",
 ];
 
 $zipWriter = new ZipArchive();
@@ -70,7 +69,7 @@ unlink($file);
 $pathListAdditional = [
     "abc/filename6.txt",
     "filename16.txt",
-    "abc/filename17.txt",
+    "dir/filename17.txt",
     "abc/filename23.txt",
     "abc/filename24.txt",
 ];
@@ -89,8 +88,6 @@ $target = __DIR__ . DIRECTORY_SEPARATOR . 'bug77978_unix';
 unlink($file);
 
 $pathList = [
-    "abc/test:/filename1.txt",
-    "abc/test:a/filename2.txt",
     "abc./test/filename3.txt",
     "abc../test/filename4.txt",
     "abc/test/filename5.txt",
@@ -99,20 +96,18 @@ $pathList = [
     "/abc/filename8.txt",
     "abc/filename9.txt",
     ":abc/filename10.txt",
-    "ab:c/filename11.txt",
-    "abc:/filename12.txt",
     "abc/.filename13.txt",
     "abc/..filename14.txt",
     "abc/../filename15.txt",
-    "abc/../../filename16.txt",
-    "abc/../../dir/filename17.txt",
+    "filename16.txt",
+    "dir/filename17.txt",
     "abc/./filename18.txt",
     "abc/file:name19.txt",
     "abc/file.name20.txt",
     "abc//filename21.txt",
-    "C:abc/filename22.txt",
-    "C:\abc/filename23.txt",
-    "C:/abc/filename24.txt",
+    "abc/filename22.txt",
+    "abc/filename23.txt",
+    "abc/filename24.txt",
     "abc/filename6.txt",
     "filename16.txt",
     "abc/filename17.txt",
@@ -123,18 +118,29 @@ foreach($pathList as $path) {
     }
 }
 rmdir($target);
---EXPECT--
+--EXPECTF--
+Warning: ZipArchive::extractTo(): No such file or directory in %s on line %d
 abc/test:/filename1.txt 	not found
+
+Warning: ZipArchive::extractTo(): Not a directory in %s on line %d
 abc/test:a/filename2.txt 	not found
 abc./test/filename3.txt 	found
-abc../test/filename4.txt 	found
+
+Warning: ZipArchive::extractTo(): No such file or directory in %s on line %d
+abc../test/filename4.txt 	not found
 abc/test/filename5.txt 	found
 ../abc/filename6.txt 	not found
 ./abc/filename7.txt 	found
 /abc/filename8.txt 	found
 abc/filename9.txt 	found
-:abc/filename10.txt 	found
+
+Warning: ZipArchive::extractTo(): No such file or directory in %s on line %d
+:abc/filename10.txt 	not found
+
+Warning: ZipArchive::extractTo(): Not a directory in %s on line %d
 ab:c/filename11.txt 	not found
+
+Warning: ZipArchive::extractTo(): No such file or directory in %s on line %d
 abc:/filename12.txt 	not found
 abc/.filename13.txt 	found
 abc/..filename14.txt 	found
@@ -145,10 +151,11 @@ abc/./filename18.txt 	found
 abc/file:name19.txt 	found
 abc/file.name20.txt 	found
 abc//filename21.txt 	found
-C:abc/filename22.txt 	found
+C:abc/filename22.txt 	not found
 C:\abc/filename23.txt 	not found
 C:/abc/filename24.txt 	not found
 abc/filename6.txt 	found
 filename16.txt 	found
-abc/filename17.txt 	found
-Warning: ZipArchive::extractTo(): Not a directory in %s on line %d
+dir/filename17.txt 	found
+abc/filename23.txt 	found
+abc/filename24.txt 	found
